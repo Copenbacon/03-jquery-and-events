@@ -24,17 +24,21 @@ articleView.handleAuthorFilter = function() {
             that was aselected. Hint: use an attribute selector to find
             those articles that match the value, and then fade them in.
         */
-      $('#articles').hide();
+        //done
+      $('article').hide();
       console.log('hide ran');
-      // $("article['data-author', $(this).val()]').fadeIn();
-      $('article[data-author=' + '"' + $(this).val()+ '"' + ']');
+      $('article[data-author="' + $(this).val() + '"]').fadeIn();
+
       console.log($(this).val(), 'data-author ran');
 
     } else {
     /* Otherwise, we should:
         1. Show all the articles except the template */
+        //done
+        $('article').show();
+        $('article.template').hide();
     }
-    // $('#category-filter').val('');
+    $('#category-filter').val('');
   });
 };
 
@@ -42,6 +46,21 @@ articleView.handleCategoryFilter = function() {
   /* TODO: Just like we do for #author-filter above, we should also handle
   change events on the #category-filter element. Be sure to reset the
   #author-filter while you're at it! */
+  //done
+  $('#category-filter').on('change', function() {
+    if ($(this).val()) {
+
+      $('article').hide();
+      console.log('hide ran');
+      $('article[data-category="' + $(this).val() + '"]').fadeIn();
+
+      console.log($(this).val(), 'data-category ran');
+    } else {
+      $('article').show();
+      $('article.template').hide();
+    }
+    $('#author-filter').val('');
+  });
 };
 
 articleView.handleMainNav = function () {
@@ -51,8 +70,13 @@ articleView.handleMainNav = function () {
       2. Fade in the single .tab-content section that is
         associated with the .tab element's data-content attribute.
     */
+    $('.tab-content').hide();
+    var $idContent = $(this).data().content;
+    console.log($idContent, 'id Content');
+    $('#' + $idContent).fadeIn();
+    $idContent = "";
   });
-  $('.main-nav .tab:first').click();
+  // $('.main-nav .tab:first').click();
 };
 
 articleView.setTeasers = function() {
@@ -63,11 +87,24 @@ articleView.setTeasers = function() {
     1. Prevent the default action of a link.
     2. Reveal everything in that particular article now.
     3. Hide that read-on link!
+    */
+    $('.read-on').on('click', function(event){
+      event.preventDefault();
+      $(this).parent().find('*').show();
+      $(this).hide();
+    });
 
+
+
+
+/*
     // STRETCH GOAl!: change the 'Read On' link to 'Show Less'
   */
 };
 
 // TODO: Invoke all of the above functions (I mean, methods!):
 articleView.populateFilters();
-$('#author-filter').on('click',articleView.handleAuthorFilter);
+articleView.setTeasers();
+articleView.handleAuthorFilter();
+articleView.handleCategoryFilter();
+articleView.handleMainNav();
